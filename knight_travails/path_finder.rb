@@ -3,11 +3,13 @@ require_relative 'poly_tree'
 class KnightPathFinder
 
     def initialize(start_pos)
-       @root_node=PolyTreeNode.new(start_pos)
-       @considered_pos=[@root_node]
+       @considered_pos=[start_pos]
+       @root_node = build_move_tree(start_pos)
+    end
     
-    def build_move_tree
-        que=[@root_node]
+    def build_move_tree(pos)
+        start=PolyTreeNode.new(pos)
+        que=[start]
 
         while !que.empty?
         current=que.shift
@@ -17,9 +19,7 @@ class KnightPathFinder
             que.push(node)
         end
         end
-        @root_node
-    end
-
+        start
     end
 
     def self.valid_moves(pos)
@@ -40,4 +40,21 @@ class KnightPathFinder
         moves
     end
 
+    def find_path(end_pos)
+        path=@root_node.bfs(end_pos)
+
+        trace_path_back(path).reverse.map(&:value)
+    end
+
+    def trace_path_back(node)
+      return [node] if node.parent.nil?
+      [node]+trace_path_back(node.parent)
+    end
+
+end
+
+if $PROGRAM_NAME == __FILE__
+    kpf = KnightPathFinder.new([0, 0])
+    p kpf.find_path([7, 6])
+    p kpf.find_path([6, 2])
 end

@@ -37,9 +37,8 @@ class PolyTreeNode
     end
 
     def bfs(target_value)
-        arr=[self]
         return self if self.value === target_value
-        arr=self.children 
+        arr=[self]
 
         while !arr.empty?
             return arr.first if arr.first.value === target_value
